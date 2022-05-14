@@ -1,0 +1,14 @@
+# 本文件乃配置文件模板，请在可执行文件根目录下新建一个config.toml文件作为配置文件
+[databases]
+    [databases.master]
+    host="127.0.0.1"
+    dbname="test"
+    user="test"
+    password="123456"
+    port=3306
+
+[redis]
+host="127.0.0.1"
+port=6379
+key_prefix=""
+db=0
