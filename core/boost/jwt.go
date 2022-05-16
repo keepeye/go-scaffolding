@@ -1,4 +1,4 @@
-package middlewares
+package boost
 
 import (
 	"fmt"
@@ -8,7 +8,8 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func JWT(secretKey string) gin.HandlerFunc {
+// JWTValidator 返回一个通用的中间件用于验证jwt令牌并将claims写进context
+func JWTValidator(secretKey string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenStr := ctx.GetHeader("Authorization")
 		if tokenStr == "" || !strings.HasPrefix(tokenStr, "Bearer ") {

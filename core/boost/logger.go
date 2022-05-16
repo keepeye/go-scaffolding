@@ -1,4 +1,4 @@
-package middlewares
+package boost
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// CustomLogger 自定义gin的logger，输出重定向到logrus.Writer
 func CustomLogger() gin.HandlerFunc {
 	return gin.LoggerWithConfig(gin.LoggerConfig{
 		Formatter: func(param gin.LogFormatterParams) string {

@@ -11,7 +11,7 @@ import (
 
 // 带登录验证的路由
 func guard(router gin.IRouter, path string) gin.IRouter {
-	return router.Group(path, middlewares.JWT(constants.JWT_SECRET), middlewares.Auth)
+	return router.Group(path, boost.JWTValidator(constants.JWT_SECRET), middlewares.Auth)
 }
 
 // 在这里注册所有的路由

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"myapp/server/middlewares"
+	"myapp/core/boost"
 	"myapp/server/routes"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,7 @@ func Command() *cli.Command {
 
 func Run(ctx *cli.Context) error {
 	app := gin.New()
-	app.Use(middlewares.CustomLogger(), gin.Recovery())
+	app.Use(boost.CustomLogger(), gin.Recovery())
 	routes.Setup(app)
 	return app.Run(":" + cast.ToString(ctx.Int("listen-port")))
 }
