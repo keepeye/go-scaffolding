@@ -8,10 +8,6 @@ type Hello struct {
 	base
 }
 
-func (c *Hello) Setup(router gin.IRouter) {
-	router.GET("/", c.Index)
-}
-
-func (c *Hello) Index(ctx *gin.Context) {
+func (c *Hello) Get(ctx *gin.Context) {
 	ctx.String(200, "Hello World!!")
 }
