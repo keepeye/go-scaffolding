@@ -4,7 +4,7 @@ go简单项目骨架
 
 支持：
 - 命令行工具开发(基于urfave/cli框架)
-- HTTP服务开发(基于gin框架)
+- HTTP服务开发(基于echo框架)
 
 目录结构
 
@@ -12,7 +12,7 @@ go简单项目骨架
 bin #存放编译生成的程序或者本地测试文件，不会进入版本控制
 commands # 命令行，每一个命令新建一个子目录
 core # 全项目共享的代码
-    boost # 框架增强包，例如gin的控制器路由注册、jwt验证、自定义logger等
+    boost # 框架增强包，例如自定义logger等
     config # 配置解析和管理
     libs # 自定义类库
     models # 数据库模型
