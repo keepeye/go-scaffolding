@@ -14,7 +14,7 @@ func Auth() echo.MiddlewareFunc {
 		Skipper:       middleware.DefaultSkipper,
 		SigningMethod: middleware.AlgorithmHS256,
 		ContextKey:    "jwt",
-		TokenLookup:   "header:" + echo.HeaderAuthorization,
+		TokenLookup:   "header:Authorization,query:token",
 		AuthScheme:    "Bearer",
 		Claims:        &jwt.StandardClaims{},
 		SuccessHandler: func(ctx echo.Context) {

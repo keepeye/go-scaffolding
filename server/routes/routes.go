@@ -16,5 +16,6 @@ func guard(router *echo.Echo, path string) *echo.Group {
 // 在这里注册所有的路由
 func Setup(router *echo.Echo) {
 	boost.RegisterController(router.Group("/"), new(controllers.Hello))
+	boost.RegisterController(router.Group("/auth"), new(controllers.Auth))
 	boost.RegisterController(guard(router, "/user"), new(controllers.User))
 }
