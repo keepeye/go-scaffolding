@@ -1,19 +1,22 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
+)
 
 type base struct {
 }
 
-func (c *base) Fail(ctx *gin.Context, code int, message string) {
-	ctx.JSON(200, gin.H{
+func (c *base) Fail(ctx echo.Context, code int, message string) error {
+	return ctx.JSON(200, gin.H{
 		"code":    code,
 		"message": message,
 	})
 }
 
-func (c *base) Succ(ctx *gin.Context, data interface{}) {
-	ctx.JSON(200, gin.H{
+func (c *base) Succ(ctx echo.Context, data interface{}) error {
+	return ctx.JSON(200, gin.H{
 		"code": 0,
 		"data": data,
 	})

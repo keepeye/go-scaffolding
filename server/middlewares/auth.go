@@ -1,22 +1,33 @@
 package middlewares
 
 import (
-	"github.com/gin-gonic/gin"
+	"myapp/server/constants"
+
 	"github.com/golang-jwt/jwt"
-	log "github.com/sirupsen/logrus"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
-func Auth(ctx *gin.Context) {
-	jwtClaims, exists := ctx.Get("jwt-claims")
-	if !exists {
-		log.Warnf("Authentication failed, pre JWT middleware is required")
-		ctx.AbortWithStatus(401)
-		return
-	}
-	claims := jwtClaims.(jwt.MapClaims)
-	userID := claims["sub"]
-	// 读取user信息，并存储到ctx中
-	// user := models.GetUserByID(userId)
-	// ctx.Set("user", user)
-	ctx.Set("userId", userID)
+func Auth() echo.MiddlewareFunc {
+	return middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey:    []byte(constants.JWT_SECRET),
+		Skipper:       middleware.DefaultSkipper,
+		SigningMethod: middleware.AlgorithmHS256,
+		ContextKey:    "jwt",
+		TokenLookup:   "header:" + echo.HeaderAuthorization,
+		AuthScheme:    "Bearer",
+		Claims:        &jwt.StandardClaims{},
+		SuccessHandler: func(ctx echo.Context) {
+			jwtToken := ctx.Get("jwt").(*jwt.Token)
+			claims := jwtToken.Claims.(*jwt.StandardClaims)
+			userID := claims.Subject
+			// 读取user信息，并存储到ctx中
+			// user := models.GetUserByID(userId)
+			// ctx.Set("user", user)
+			ctx.Set("userId", userID)
+		},
+		ErrorHandlerWithContext: func(err error, c echo.Context) error {
+			return echo.ErrUnauthorized
+		},
+	})
 }

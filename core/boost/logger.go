@@ -1,26 +1,15 @@
 package boost
 
 import (
-	"fmt"
-
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/sirupsen/logrus"
 )
 
-// CustomLogger 自定义gin的logger，输出重定向到logrus.Writer
-func CustomLogger() gin.HandlerFunc {
-	return gin.LoggerWithConfig(gin.LoggerConfig{
-		Formatter: func(param gin.LogFormatterParams) string {
-			return fmt.Sprintf("%s %s %d %s | %s | %s | %s\n",
-				param.Method,
-				param.Path,
-				param.StatusCode,
-				param.Latency,
-				param.Request.UserAgent(),
-				param.ClientIP,
-				param.ErrorMessage,
-			)
-		},
+// CustomLogger 自定义logger，输出重定向到logrus.Writer
+func CustomLogger() echo.MiddlewareFunc {
+	return middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "${method} ${host}${uri} - ${status} - ${remote_ip} \n", //末尾不能少了换行，否则无法输出
 		Output: logrus.StandardLogger().WriterLevel(logrus.DebugLevel),
 	})
 }

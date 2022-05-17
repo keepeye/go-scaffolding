@@ -1,11 +1,12 @@
 package boost
 
 import (
+	"fmt"
 	"reflect"
 	"regexp"
 	"strings"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 )
 
 // Controller 注册控制器路由
@@ -13,13 +14,14 @@ import (
 // - GET /users/list --> *User.GetList
 // - GET /users/profile/:name/:age --> *User.GetProfileByNameByAge
 // - POST /users --> *Users.Post
-func RegisterController(router gin.IRouter, structObj interface{}) {
+func RegisterController(router *echo.Group, structObj interface{}) {
 	snake := regexp.MustCompile("([A-Z])")
 	reflectValue := reflect.ValueOf(structObj)
 	reflectType := reflectValue.Type()
 	for i := 0; i < reflectType.NumMethod(); i++ {
 		method := reflectValue.Method(i)
-		methodName := reflectType.Method(i).Name
+		methodType := reflectType.Method(i)
+		methodName := methodType.Name
 		// 方法名必须以 Get Post Put Delete 开头
 		verb := ""
 		for _, v := range []string{"Get", "Post", "Put", "Delete"} {
@@ -60,7 +62,7 @@ func RegisterController(router gin.IRouter, structObj interface{}) {
 			path = "/" + strings.Join(pathes, "/")
 		}
 		verb = strings.ToUpper(verb)
-		handler := method.Interface().(func(*gin.Context))
-		router.Handle(verb, path, handler)
+		handler := method.Interface().(func(echo.Context) error)
+		router.Add(verb, path, handler).Name = fmt.Sprintf("%s.%s", reflectType.String(), methodType.Name)
 	}
 }
