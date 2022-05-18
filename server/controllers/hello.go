@@ -9,5 +9,7 @@ type Hello struct {
 }
 
 func (c *Hello) Get(ctx echo.Context) error {
-	return ctx.String(200, "Hello World!!")
+	return ctx.Render(200, "hello_index", echo.Map{
+		"name": "cheng",
+	})
 }

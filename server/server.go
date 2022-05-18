@@ -1,9 +1,12 @@
 package server
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"myapp/core/boost"
 	"myapp/core/config"
+	"myapp/core/libs/echopongo2"
 	"myapp/server/routes"
 	"strings"
 
@@ -38,11 +41,23 @@ func printRoutes(routes []*echo.Route) {
 	fmt.Println("<<<<<<<<<<<<<<<<<")
 }
 
+func Must[T any](v T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+//go:embed views
+var tplEmbedFs embed.FS
+
 func Run(ctx *cli.Context) error {
 	app := echo.New()
 	app.Use(middleware.Recover())
 	app.Use(boost.CustomHttpLogger(strings.Split(config.GetString("logger.httpLogTags"), ",")))
 	routes.Setup(app)
+	// 模板渲染引擎绑定为pongo2
+	app.Renderer = echopongo2.NewRenderer("server", Must(fs.Sub(tplEmbedFs, "views")))
 	app.HideBanner = true
 	app.HidePort = true
 	// printRoutes(app.Routes())
