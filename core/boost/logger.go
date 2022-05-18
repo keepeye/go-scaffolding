@@ -10,6 +10,6 @@ import (
 func CustomLogger() echo.MiddlewareFunc {
 	return middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "${method} ${host}${uri} - ${status} - ${remote_ip} \n", //末尾不能少了换行，否则无法输出
-		Output: logrus.StandardLogger().WriterLevel(logrus.DebugLevel),
+		Output: logrus.StandardLogger().WriterLevel(logrus.InfoLevel),
 	})
 }

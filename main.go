@@ -2,8 +2,8 @@ package main
 
 import (
 	"myapp/commands"
+	"myapp/core/config"
 	"os"
-	"runtime"
 	"sort"
 
 	"myapp/server"
@@ -15,7 +15,11 @@ import (
 func initLogger() {
 	// 日志
 	logrus.SetLevel(logrus.DebugLevel)
-	logrus.SetFormatter(&logrus.TextFormatter{ForceColors: runtime.GOOS == "windows", FullTimestamp: true, TimestampFormat: "2006-01-02 15:04:05"})
+	logrus.SetFormatter(&logrus.TextFormatter{
+		ForceColors:     config.GetBool("development"),
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
 }
 
 func main() {

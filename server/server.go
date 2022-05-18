@@ -7,6 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cast"
 	"github.com/urfave/cli/v2"
 )
@@ -41,6 +42,9 @@ func Run(ctx *cli.Context) error {
 	app.Use(boost.CustomLogger())
 	routes.Setup(app)
 	app.HideBanner = true
+	app.HidePort = true
 	// printRoutes(app.Routes())
-	return app.Start(":" + cast.ToString(ctx.Int("listen-port")))
+	listenAt := ":" + cast.ToString(ctx.Int("listen-port"))
+	log.Infof("http server started on %s", listenAt)
+	return app.Start(listenAt)
 }
