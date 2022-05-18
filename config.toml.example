@@ -5,6 +5,12 @@
 # 是否开发环境
 development=true
 
+# 日志配置
+[logger]
+level="DEBUG" # 输出级别 - DEBUG|INFO|WARN|ERROR
+httpLogTags="method,host,uri,status,remote_ip" # http请求日志字段
+
+
 # 数据库配置
 [databases]
     [databases.master]

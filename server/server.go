@@ -3,7 +3,9 @@ package server
 import (
 	"fmt"
 	"myapp/core/boost"
+	"myapp/core/config"
 	"myapp/server/routes"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -39,7 +41,7 @@ func printRoutes(routes []*echo.Route) {
 func Run(ctx *cli.Context) error {
 	app := echo.New()
 	app.Use(middleware.Recover())
-	app.Use(boost.CustomLogger())
+	app.Use(boost.CustomHttpLogger(strings.Split(config.GetString("logger.httpLogTags"), ",")))
 	routes.Setup(app)
 	app.HideBanner = true
 	app.HidePort = true

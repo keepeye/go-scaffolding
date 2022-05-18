@@ -5,6 +5,7 @@ import (
 	"myapp/core/config"
 	"os"
 	"sort"
+	"strings"
 
 	"myapp/server"
 
@@ -13,13 +14,28 @@ import (
 )
 
 func initLogger() {
-	// 日志
-	logrus.SetLevel(logrus.DebugLevel)
+	// 日志输出格式
 	logrus.SetFormatter(&logrus.TextFormatter{
 		ForceColors:     config.GetBool("development"),
 		FullTimestamp:   true,
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
+	// logrus.SetFormatter(&logrus.JSONFormatter{
+	// 	TimestampFormat: "2006-01-02 15:04:05",
+	// })
+	// 日志级别设置
+	logLevel := config.GetString("logger.level")
+	logrus.Info("日志输出级别:", logLevel)
+	switch strings.ToLower(logLevel) {
+	case "info":
+		logrus.SetLevel(logrus.InfoLevel)
+	case "warn":
+		logrus.SetLevel(logrus.WarnLevel)
+	case "error":
+		logrus.SetLevel(logrus.ErrorLevel)
+	default:
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 }
 
 func main() {
