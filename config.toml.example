@@ -13,7 +13,7 @@ httpLogTags="method,host,uri,status,remote_ip" # http请求日志字段
 
 # 数据库配置
 [databases]
-    [databases.master]
+    [databases.main]
     host="127.0.0.1"
     dbname="test"
     user="test"

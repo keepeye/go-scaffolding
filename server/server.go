@@ -3,11 +3,9 @@ package server
 import (
 	"embed"
 	"fmt"
-	"io/fs"
 	"myapp/core/boost"
 	"myapp/core/config"
-	"myapp/core/libs/echopongo2"
-	"myapp/core/libs/helpers"
+	"myapp/core/di"
 	"myapp/server/routes"
 	"strings"
 
@@ -51,7 +49,7 @@ func Run(ctx *cli.Context) error {
 	app.Use(boost.CustomHttpLogger(strings.Split(config.GetString("logger.httpLogTags"), ",")))
 	routes.Setup(app)
 	// 模板渲染引擎绑定为pongo2
-	app.Renderer = echopongo2.NewRenderer("server", helpers.Must(fs.Sub(tplEmbedFs, "views")))
+	app.Renderer = di.Default().GetTplRenderer(tplEmbedFs, "views")
 	app.HideBanner = true
 	app.HidePort = true
 	// printRoutes(app.Routes())
