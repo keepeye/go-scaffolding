@@ -38,6 +38,7 @@ func (container *Container) set(name string, v interface{}) interface{} {
 	return actual
 }
 
+// GetTplRenderer 模板渲染引擎
 func (container *Container) GetTplRenderer(embFs embed.FS, rootDirName string) *echopongo2.Renderer {
 	serviceName := "TplRenderer"
 	if v := container.get(serviceName); v != nil {
