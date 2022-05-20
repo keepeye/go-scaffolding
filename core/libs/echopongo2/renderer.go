@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"myapp/core/libs/helpers"
 	"strings"
 
 	"github.com/flosch/pongo2/v5"
@@ -14,14 +15,22 @@ type Renderer struct {
 	tplSet *pongo2.TemplateSet
 }
 
-// NewRenderer 初始化模板renderer
+// NewRendererOverFs 基于fs接口的renderer
 // viewsFs参数说明：
 //      外部首先使用embed包，将模板目录封装到embed.FS，例如
 //           //go:embed views
 //           var embedFs embed.FS
 //           renderer := NewRenderer(fs.Sub(embedFs, "views"))
-func NewRenderer(name string, viewsFs fs.FS) *Renderer {
+func NewRendererOverFs(name string, viewsFs fs.FS) *Renderer {
 	tplSet := pongo2.NewSet(name, pongo2.NewFSLoader(viewsFs))
+	return &Renderer{
+		tplSet: tplSet,
+	}
+}
+
+// NewRendererOverDir 基于本地文件目录的renderer
+func NewRendererOverDir(name string, baseDir string) *Renderer {
+	tplSet := pongo2.NewSet(name, helpers.Must(pongo2.NewLocalFileSystemLoader(baseDir)))
 	return &Renderer{
 		tplSet: tplSet,
 	}

@@ -3,9 +3,11 @@ package server
 import (
 	"embed"
 	"fmt"
+	"io/fs"
 	"myapp/core/boost"
 	"myapp/core/config"
 	"myapp/core/di"
+	"myapp/core/libs/helpers"
 	"myapp/server/routes"
 	"strings"
 
@@ -49,7 +51,7 @@ func Run(ctx *cli.Context) error {
 	app.Use(boost.CustomHttpLogger(strings.Split(config.GetString("logger.httpLogTags"), ",")))
 	routes.Setup(app)
 	// 模板渲染引擎绑定为pongo2
-	app.Renderer = di.Default().GetTplRenderer(tplEmbedFs, "views")
+	app.Renderer = di.Default().GetTplRenderer("Tpl", helpers.Must(fs.Sub(tplEmbedFs, "views")))
 	app.HideBanner = true
 	app.HidePort = true
 	// printRoutes(app.Routes())

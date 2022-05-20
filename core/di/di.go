@@ -1,11 +1,9 @@
 package di
 
 import (
-	"embed"
 	"io/fs"
 	"myapp/core/config"
 	"myapp/core/libs/echopongo2"
-	"myapp/core/libs/helpers"
 	"myapp/core/services/database"
 	"sync"
 )
@@ -39,13 +37,12 @@ func (container *Container) set(name string, v interface{}) interface{} {
 }
 
 // GetTplRenderer 模板渲染引擎
-func (container *Container) GetTplRenderer(embFs embed.FS, viewDir string) *echopongo2.Renderer {
-	serviceName := "TplRenderer#" + viewDir
+func (container *Container) GetTplRenderer(name string, f fs.FS) *echopongo2.Renderer {
+	serviceName := "TplRenderer#" + name
 	if v := container.get(serviceName); v != nil {
 		return v.(*echopongo2.Renderer)
 	}
-	subfs := helpers.Must(fs.Sub(embFs, viewDir))
-	renderer := echopongo2.NewRenderer(serviceName, subfs)
+	renderer := echopongo2.NewRendererOverFs(serviceName, f)
 	return container.set(serviceName, renderer).(*echopongo2.Renderer)
 }
 
