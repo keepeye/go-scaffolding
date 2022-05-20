@@ -5,6 +5,7 @@ import (
 	"myapp/core/config"
 	"myapp/core/libs/echopongo2"
 	"myapp/core/services/database"
+	"myapp/core/services/redis"
 	"sync"
 )
 
@@ -62,4 +63,14 @@ func (container *Container) GetDB(connectName string) *database.Connection {
 	port := config.GetInt("databases.%s.port", connectName)
 	connection := database.Connect(host, dbname, user, password, port)
 	return container.set(serviceName, connection).(*database.Connection)
+}
+
+// GetRedis 获取redis服务
+func (container *Container) GetRedis() *redis.RedisClient {
+	serviceName := "Redis"
+	if v := container.get(serviceName); v != nil {
+		return v.(*redis.RedisClient)
+	}
+	redisClient := redis.NewRedisClient()
+	return container.set(serviceName, redisClient).(*redis.RedisClient)
 }
