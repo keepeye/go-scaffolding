@@ -40,12 +40,12 @@ func (container *Container) set(name string, v interface{}) interface{} {
 
 // GetTplRenderer 模板渲染引擎
 func (container *Container) GetTplRenderer(embFs embed.FS, rootDirName string) *echopongo2.Renderer {
-	serviceName := "TplRenderer"
+	serviceName := "TplRenderer#" + rootDirName
 	if v := container.get(serviceName); v != nil {
 		return v.(*echopongo2.Renderer)
 	}
 	subfs := helpers.Must(fs.Sub(embFs, rootDirName))
-	renderer := echopongo2.NewRenderer(rootDirName, subfs)
+	renderer := echopongo2.NewRenderer(serviceName, subfs)
 	return container.set(serviceName, renderer).(*echopongo2.Renderer)
 }
 
